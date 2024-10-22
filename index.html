@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="EN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galactic Cuisine Terminal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link href="index.css" rel="stylesheet">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div id="notifications"></div>
+    <div class="grid-container">
+        <!-- Terminal Block -->
+        <div class="block terminal-block">
+            <div class="title">GALACTIC CUISINE TERMINAL</div>
+            <div id="terminal-output"></div>
+            <div class="terminal-input">
+                guest@GCT:~$ <input title="command" type="text" id="command-input" autofocus>
+            </div>
+        </div>
+
+        <!-- Cart Block -->
+        <div class="block cart-block">
+            <div class="title">SHOPPING CART</div>
+            <div class="cart-content" id="cart-content">
+                Your cart is empty
+            </div>
+            <div class="cart-total" id="cart-total"></div>
+            <button class="retro-button pay" onclick="commands.pay()">PAY NOW</button>
+        </div>
+
+        <!-- Menu Buttons Block -->
+        <div class="block menu-buttons">
+            <button class="retro-button" onclick="showContent('human')">Earth Menu</button>
+            <button class="retro-button" onclick="showContent('alien')">Alien Menu</button>
+            <button class="retro-button" onclick="showContent('about')">About</button>
+            <button class="retro-button" id="help" onclick="showContent('help')">Help</button>
+        </div>
+<!-- Dynamic Content Block -->
+        <div class="block" id="active-content"></div>
+
+        <!-- Info Block -->
+        <div class="block info-block">
+            <div class="title">QUICK INFO</div>
+            <p>🌍 Earth dishes available: 3</p>
+            <p>👽 Alien dishes available: 3</p>
+            <p>💫 Current exchange rate: 1 UC = 2.5 Earth Credits</p>
+            <p>⚡ Instant quantum delivery available!</p>
+        </div>
+
+        
+    </div>
+
+
+
+</body>
+</html>
