@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
 <html lang="EN">
 <head>
     <meta charset="UTF-8">
@@ -58,3 +59,358 @@
 
 </body>
 </html>
+=======
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Galactic Cuisine Terminal - Order food from Earth and beyond!">
+    <meta name="keywords" content="galactic, cuisine, terminal, food, order, alien, earth, menu">
+    <title>Galactic Cuisine Terminal</title>
+    <style>
+        body {
+	
+            margin: auto;
+            min-height: 100vh;
+            font-family: 'Courier New', monospace;
+            background: 
+                repeating-linear-gradient(
+                    45deg,
+                    #000 0px,
+                    #000 20px,
+                    rgba(255, 165, 0, 0.1) 20px,
+                    rgba(255, 165, 0, 0.1) 40px
+                );
+        }
+
+        #terminal {
+            max-width: 800px;
+            margin: 20px auto;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border: 2px solid #ffa500;
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.5);
+            color: #ffd700;
+            line-height: 1.6;
+            border-radius: 10px;
+        }
+
+        .prompt {
+            color: #ffa500;
+            margin-bottom: 10px;
+        }
+
+        .cursor {
+            animation: blink 1s infinite;
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: #ffa500;
+            vertical-align: middle;
+        }
+
+        input {
+            background: transparent;
+            border: none;
+            color: #ffd700;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            width: 80%;
+            outline: none;
+        }
+
+        .output {
+            margin: 10px 0;
+            white-space: pre-wrap;
+        }
+
+        .highlight {
+            color: #fff;
+            text-shadow: 0 0 5px #ffa500;
+        }
+
+        .error {
+            color: #ff4500;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .ascii-art {
+            color: #ffa500;
+            white-space: pre;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 12px;
+            text-shadow: 0 0 5px #ffa500;
+        }
+
+        .menu-item {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ffa500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 165, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 165, 0, 0.2);
+            transform: translateX(10px);
+        }
+
+        .menu-item .ascii-image {
+            margin-right: 15px;
+            color: #ffa500;
+            font-size: 10px;
+        }
+
+        .food-category {
+            border-bottom: 2px solid #ffa500;
+            margin: 20px 0;
+            padding-bottom: 5px;
+            text-shadow: 0 0 5px #ffa500;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px #ffa500; }
+            50% { text-shadow: 0 0 20px #ffa500; }
+            100% { text-shadow: 0 0 5px #ffa500; }
+        }
+
+        .title {
+            animation: glow 2s infinite;
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        #notifications {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .notification {
+            background: rgba(255, 165, 0, 0.9);
+            color: black;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <div id="notifications"></div>
+    <div id="terminal">
+        <div class="ascii-art">
+     _____ _____ _____ ____  
+    |   __|     |     |    \ 
+    |   __| | | |  |  |  |  |
+    |__|  |_|_|_|_____|____/ 
+    
+    GALACTIC CUISINE TERMINAL
+     [Human & Alien Friendly]
+        </div>
+        <div id="output"></div>
+        <div class="prompt">
+            guest@GCT:~$ <input type="text" id="command-input" placeholder="help" autofocus>
+        </div>
+    </div>
+
+    <script>
+        const cart = [];
+        
+        const foodArt = {
+            pizza: `
+  _____
+ /     \\
+|  ☉ ☉  |
+|   ▾   |
+ \\_____/`,
+            burger: `
+   _____
+  /     \\
+  |==|==|
+  |==|==|
+  \\____/`,
+            sushi: `
+  ╔═══╗
+  ║●~●║
+  ╚═══╝`,
+            zorgflakes: `
+   ╭~~~~╮
+  ≈|★≈★|≈
+   ╰~~~~╯`,
+            moonmush: `
+    ╱╲
+   ╱☆☆╲
+  ╱╲__╱╲`,
+            starjelly: `
+   ⊙︎
+ ╭━━━╮
+ ┃∴∴∴┃
+ ╰━━━╯`
+        };
+
+        const menu = {
+            human: {
+                'pizza': { price: 10, desc: 'Classic Earth Pizza (Various Toppings)' },
+                'burger': { price: 8, desc: 'Beef Burger with Earth Vegetables' },
+                'sushi': { price: 15, desc: 'Fresh Earth Fish and Rice Rolls' }
+            },
+            alien: {
+                'zorgflakes': { price: 15, desc: 'Crunchy Plasma-Fried Zorg Tentacles' },
+                'moonmush': { price: 12, desc: 'Glowing Mushrooms from Europa' },
+                'starjelly': { price: 20, desc: 'Gelatinous Nebula Extract (Warning: May cause mild levitation)' }
+            }
+        };
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.getElementById('notifications').appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        function createClickableMenu(items, category) {
+            let output = `<div class="food-category">=== ${category.toUpperCase()} FOOD MENU ===</div>`;
+            for (let [item, details] of Object.entries(items)) {
+                output += `
+                <div class="menu-item" onclick="handleMenuClick('${item}')">
+                    <div class="ascii-image">${foodArt[item] || ''}</div>
+                    <div>
+                        <div class="highlight">${item} - ${details.price} UC</div>
+                        <div>${details.desc}</div>
+                    </div>
+                </div>`;
+            }
+            return output;
+        }
+
+        const commands = {
+            help: `Available commands:
+    help     - Show this help message
+    menu     - Display food menu for all species
+    human    - Show Earth food menu
+    alien    - Show alien food menu
+    order    - Order an item (usage: order <item> or click items)
+    cart     - Show your current order
+    clear    - Clear the terminal
+    pay      - Finalize and pay for your order
+    about    - About Galactic Cuisine Terminal`,
+
+            about: `Welcome to the Galactic Cuisine Terminal (GCT)!
+We serve both human and alien delicacies, approved by the 
+Intergalactic Food Safety Administration.
+All prices in Universal Credits (UC).
+WARNING: Some alien dishes may cause unexpected effects.`,
+
+            menu: function() {
+                return createClickableMenu(menu.human, 'Earth') + 
+                       createClickableMenu(menu.alien, 'Alien');
+            },
+
+            human: function() {
+                return createClickableMenu(menu.human, 'Earth');
+            },
+
+            alien: function() {
+                return createClickableMenu(menu.alien, 'Alien');
+            },
+
+            order: function(item) {
+                return handleMenuClick(item);
+            },
+
+            cart: function() {
+                if (cart.length === 0) return "Your cart is empty.";
+                const allItems = { ...menu.human, ...menu.alien };
+                let total = 0;
+                let output = "Your current order:\n";
+                cart.forEach(item => {
+                    output += `${item} - ${allItems[item].price} UC\n`;
+                    total += allItems[item].price;
+                });
+                output += `\nTotal: ${total} UC`;
+                return output;
+            },
+
+            pay: function() {
+                if (cart.length === 0) return "Cart is empty! Nothing to pay for.";
+                const total = cart.reduce((sum, item) => {
+                    const allItems = { ...menu.human, ...menu.alien };
+                    return sum + allItems[item].price;
+                }, 0);
+                cart.length = 0; // Clear cart
+                showNotification("Order processed successfully!");
+                return `Thank you for your order!
+Total paid: ${total} UC
+Your food will be teleported to your location shortly.
+Please ensure your molecular reconstructor is properly calibrated.`;
+            },
+
+            clear: () => ''
+        };
+
+        window.handleMenuClick = function(item) {
+            const allItems = { ...menu.human, ...menu.alien };
+            if (allItems[item]) {
+                cart.push(item);
+                showNotification(`Added ${item} to cart!`);
+                return `Added ${item} to your cart! (${allItems[item].price} UC)`;
+            }
+            return `Error: Item '${item}' not found in menu.`;
+        };
+
+        const input = document.getElementById('command-input');
+        const output = document.getElementById('output');
+
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const fullCommand = this.value.trim().toLowerCase();
+                const [command, ...args] = fullCommand.split(' ');
+                this.value = '';
+
+                output.innerHTML += `<div class="prompt">guest@GCT:~$ ${fullCommand}</div>`;
+
+                if (command in commands) {
+                    const result = typeof commands[command] === 'function' 
+                        ? commands[command](...args)
+                        : commands[command];
+                    
+                    if (command === 'clear') {
+                        output.innerHTML = '';
+                    } else {
+                        output.innerHTML += `<div class="output">${result}</div>`;
+                    }
+                } else if (command !== '') {
+                    output.innerHTML += `<div class="output" style="color: #ff4500;">Command not found: ${command}</div>`;
+                }
+
+                window.scrollTo(0, document.body.scrollHeight);
+            }
+        });
+
+        // Show welcome message
+        output.innerHTML = `<div class="output">Welcome to the Galactic Cuisine Terminal!
+Type 'help' to see available commands, or click on menu items to order.
+Please note: All dishes are certified safe for their respective species.</div>`;
+    </script>
+</body>
+</html>
+>>>>>>> e95d681ec55e2cc6ceb9d825584bd5827f7b79b5
